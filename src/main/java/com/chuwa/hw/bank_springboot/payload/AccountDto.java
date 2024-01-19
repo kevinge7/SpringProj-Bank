@@ -1,11 +1,22 @@
 package com.chuwa.hw.bank_springboot.payload;
 
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AccountDto {
     private Long accountId;
 
-    public Long getAccountId() {
-        return accountId;
-    }
+    private Long userId;
+
+    @NotEmpty(message = "Routing Number should not be empty. ")
+    private String routingNumber;
+
+    @NotEmpty(message = "Account Number should not be empty. ")
+    private String accountNumber;
+
 
     public AccountDto(Long userId, String routingNumber, String accountNumber) {
         this.userId = userId;
@@ -16,35 +27,5 @@ public class AccountDto {
     public AccountDto() {
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
 
-    private Long userId;
-    private String routingNumber;
-    private String accountNumber;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getRoutingNumber() {
-        return routingNumber;
-    }
-
-    public void setRoutingNumber(String routingNumber) {
-        this.routingNumber = routingNumber;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
 }

@@ -1,33 +1,26 @@
 package com.chuwa.hw.bank_springboot.payload;
 
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.List;
-
+@Getter
+@Setter
 public class BankStatementDto {
+
+    @NotEmpty
     private Long accountId;
+
+    @NotEmpty
     private LocalDate startDate;
+
+    @NotEmpty
     private LocalDate endDate;
 
     private List<TransactionDto> transactions;
 
-
-
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 
     public BankStatementDto() {
     }
@@ -38,21 +31,4 @@ public class BankStatementDto {
         this.endDate = endDate;
         this.transactions = transactions;
     }
-
-    public List<TransactionDto> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<TransactionDto> transactions) {
-        this.transactions = transactions;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
 }

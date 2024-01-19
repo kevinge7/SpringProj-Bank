@@ -6,6 +6,7 @@ import com.chuwa.hw.bank_springboot.entities.Account;
 import com.chuwa.hw.bank_springboot.entities.Transaction;
 import com.chuwa.hw.bank_springboot.payload.TransactionDto;
 import com.chuwa.hw.bank_springboot.services.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class TransactionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDto> getTransactionById(@PathVariable Long id) {
-        TransactionDto transaction = convertToDto(transactionService.getTransactionById(id));
+        @Valid TransactionDto transaction = convertToDto(transactionService.getTransactionById(id));
         return ResponseEntity.ok(transaction);
     }
 

@@ -3,6 +3,7 @@ package com.chuwa.hw.bank_springboot.controller;
 import com.chuwa.hw.bank_springboot.entities.Account;
 import com.chuwa.hw.bank_springboot.payload.AccountDto;
 import com.chuwa.hw.bank_springboot.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<AccountDto> createOrUpdateAccount(@RequestBody AccountDto accountDto){
+    public ResponseEntity<AccountDto> createOrUpdateAccount(@Valid @RequestBody AccountDto accountDto){
         AccountDto savedAccount = convertToDto(accountService.saveOrUpdateAccount(accountDto));
         return new ResponseEntity<>(savedAccount, HttpStatus.OK);
     }
