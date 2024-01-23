@@ -12,11 +12,12 @@ import java.util.List;
 
 @Service
 public class AccountService {
-    @Autowired
-    private AccountRepository accountRepository;
 
     @Autowired
     private UserProfileRepository userProfileRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     public Account saveOrUpdateAccount(AccountDto accountDto){
         UserProfile userProfile = userProfileRepository.findById(accountDto.getUserId()).orElseThrow(()-> new RuntimeException("UserProfile not found"));
