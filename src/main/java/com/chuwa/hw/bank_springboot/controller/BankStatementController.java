@@ -17,9 +17,10 @@ public class BankStatementController {
     private BankStatementService bankStatementService;
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<BankStatementDto> generateBankStatement(@PathVariable Long accountId, @RequestParam LocalDate startDate,
-                                                                  @RequestParam LocalDate endDate){
+    public ResponseEntity<BankStatementDto> generateBankStatement(@PathVariable Long accountId, @RequestParam(required = false) LocalDate startDate,
+                                                                  @RequestParam(required = false) LocalDate endDate){
         BankStatementDto bankStatementDto = bankStatementService.generateBankStatement(accountId, startDate, endDate);
         return new ResponseEntity<>(bankStatementDto, HttpStatus.OK);
     }
+
 }

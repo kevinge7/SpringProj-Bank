@@ -19,6 +19,10 @@ public class BankStatementDto {
     @NotEmpty
     private LocalDate endDate;
 
+    private AccountDto accountDto;
+
+    private UserProfileDto userProfileDto;
+
     private List<TransactionDto> transactions;
 
 

@@ -20,7 +20,8 @@ public class AccountService {
     AccountRepository accountRepository;
 
     public Account saveOrUpdateAccount(AccountDto accountDto){
-        UserProfile userProfile = userProfileRepository.findById(accountDto.getUserId()).orElseThrow(()-> new RuntimeException("UserProfile not found"));
+        UserProfile userProfile = userProfileRepository.findById(accountDto.getUserId())
+                .orElseThrow(()-> new RuntimeException("UserProfile not found"));
         Account account = new Account();
         account.setUserProfile(userProfile);
         account.setRoutingNumber(accountDto.getRoutingNumber());
