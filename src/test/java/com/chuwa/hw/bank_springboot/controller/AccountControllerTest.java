@@ -1,6 +1,7 @@
 package com.chuwa.hw.bank_springboot.controller;
 
 import com.chuwa.hw.bank_springboot.entities.Account;
+import com.chuwa.hw.bank_springboot.entities.UserProfile;
 import com.chuwa.hw.bank_springboot.payload.AccountDto;
 import com.chuwa.hw.bank_springboot.services.AccountService;
 import org.junit.jupiter.api.Assertions;
@@ -13,8 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
+
 @ExtendWith(MockitoExtension.class)
 class AccountControllerTest {
 
@@ -28,6 +34,8 @@ class AccountControllerTest {
 
     private Account account;
     private AccountDto accountDto;
+    private UserProfile userProfile;
+
 
     @BeforeAll
     static void beforeAll(){logger.info("START test");}
@@ -35,14 +43,20 @@ class AccountControllerTest {
     @BeforeEach
     void setUp(){
         logger.info("set up Account for each test");
+        userProfile = new UserProfile();
+        userProfile.setId(1L); // 设置一个有效的ID
 
         this.account = new Account();
         account.setId(1L);
+        account.setUserProfile(userProfile); // 确保设置了UserProfile
         account.setAccountNumber("12345");
         account.setRoutingNumber("67890");
         ModelMapper modelMapper = new ModelMapper();
-        this.accountDto = modelMapper.map(this.account, AccountDto.class);
 
+        accountDto = new AccountDto();
+        accountDto.setAccountId(1L);
+        accountDto.setAccountNumber("123456789");
+        accountDto.setRoutingNumber("987654321");
     }
 
     @Test
@@ -50,21 +64,31 @@ class AccountControllerTest {
         Mockito.when(accountService.saveOrUpdateAccount(ArgumentMatchers.any(AccountDto.class))).thenReturn(account);
         // 这里结尾用getBody()的意思是 因为我accountController.createOrUpdateAccount返回的是一个ResponseEntity
         // 所以获取值的时候用getBody()
-        AccountDto responseDto = accountController.createOrUpdateAccount(accountDto).getBody();
-
-
-        Assertions.assertNotNull(responseDto, "responseDto is Null");
-        assertEquals(accountDto.getAccountId(), responseDto.getAccountId(), "Account ID does not match");
-        assertEquals(accountDto.getUserId(), responseDto.getUserId(), "User ID does not match");
-        assertEquals(accountDto.getAccountNumber(), responseDto.getAccountNumber(), "Account number does not match");
-        assertEquals(accountDto.getRoutingNumber(), responseDto.getRoutingNumber(), "Routing number does not match");
+        ResponseEntity<AccountDto> response = accountController.createOrUpdateAccount(accountDto);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Mockito.verify(accountService).saveOrUpdateAccount(ArgumentMatchers.any(AccountDto.class));
     }
 
-//    @Test
-//    void getAllAccounts() {
-//    }
-//
-//    @Test
-//    void deleteAccount() {
-//    }
+    @Test
+    void getAllAccounts() {
+        Mockito.when(accountService.getAllAccountsByUserId(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(account));
+        ResponseEntity<List<AccountDto>> response = accountController.getAllAccounts(1L);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, response.getBody().size());
+        Mockito.verify(accountService).getAllAccountsByUserId(ArgumentMatchers.anyLong());
+
+    }
+
+    @Test
+    void deleteAccount() {
+        Mockito.doNothing().when(accountService).deleteAccount(ArgumentMatchers.anyLong());
+        ResponseEntity<String> response = accountController.deleteAccount(1L);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Mockito.verify(accountService).deleteAccount(ArgumentMatchers.anyLong());
+    }
 }

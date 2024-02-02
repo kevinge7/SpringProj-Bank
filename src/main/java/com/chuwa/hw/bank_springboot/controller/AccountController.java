@@ -46,13 +46,13 @@ public class AccountController {
         return dto;
     }
 
-    private Account convertToEntity(AccountDto accountDto){
-        Account account = new Account();
-        account.setId(accountDto.getAccountId());
-        account.setAccountNumber(accountDto.getAccountNumber());
-        account.setRoutingNumber(account.getRoutingNumber());
-        return account;
-    }
+//    private Account convertToEntity(AccountDto accountDto){
+//        Account account = new Account();
+//        account.setId(accountDto.getAccountId());
+//        account.setAccountNumber(accountDto.getAccountNumber());
+//        account.setRoutingNumber(account.getRoutingNumber());
+//        return account;
+//    }
 
 
 }
