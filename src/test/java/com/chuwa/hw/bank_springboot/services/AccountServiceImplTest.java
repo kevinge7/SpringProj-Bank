@@ -8,6 +8,7 @@ import com.chuwa.hw.bank_springboot.dao.UserProfileRepository;
 import com.chuwa.hw.bank_springboot.entities.Account;
 import com.chuwa.hw.bank_springboot.entities.UserProfile;
 import com.chuwa.hw.bank_springboot.payload.AccountDto;
+import com.chuwa.hw.bank_springboot.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,19 +23,16 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AccountServiceTest {
+class AccountServiceImplTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountServiceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccountServiceImplTest.class);
 
     @Mock
     private AccountRepository accountRepositoryMock;
@@ -43,7 +41,7 @@ class AccountServiceTest {
     private UserProfileRepository userProfileRepositoryMock;
 
     @InjectMocks
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
     private Account account;
     private AccountDto accountDto;
@@ -72,7 +70,7 @@ class AccountServiceTest {
         Mockito.when(userProfileRepositoryMock.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userProfile));
         Mockito.when(accountRepositoryMock.save(ArgumentMatchers.any(Account.class))).thenReturn(account);
 
-        Account savedAccount = accountService.saveOrUpdateAccount(accountDto);
+        Account savedAccount = accountServiceImpl.saveOrUpdateAccount(accountDto);
 
         Assertions.assertNotNull(savedAccount);
         Assertions.assertEquals(account.getAccountNumber(), savedAccount.getAccountNumber());
@@ -83,7 +81,7 @@ class AccountServiceTest {
     void getAccountById() {
         Mockito.when(accountRepositoryMock.findById(anyLong())).thenReturn(Optional.of(account));
 
-        Account foundAccount = accountService.getAccountById(1L);
+        Account foundAccount = accountServiceImpl.getAccountById(1L);
 
         Assertions.assertNotNull(foundAccount);
         Assertions.assertEquals(account.getId(), foundAccount.getId());
@@ -93,7 +91,7 @@ class AccountServiceTest {
     void getAllAccountsByUserId() {
         when(accountRepositoryMock.findByUserProfileId(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(account));
 
-        List<Account> accounts = accountService.getAllAccountsByUserId(1L);
+        List<Account> accounts = accountServiceImpl.getAllAccountsByUserId(1L);
 
         Assertions.assertFalse(accounts.isEmpty());
         Assertions.assertEquals(1, accounts.size());
@@ -105,7 +103,7 @@ class AccountServiceTest {
         Mockito.when(accountRepositoryMock.findById(anyLong())).thenReturn(Optional.of(account));
         Mockito.doNothing().when(accountRepositoryMock).delete(any(Account.class));
 
-        Assertions.assertDoesNotThrow(() -> accountService.deleteAccount(1L));
+        Assertions.assertDoesNotThrow(() -> accountServiceImpl.deleteAccount(1L));
         verify(accountRepositoryMock).delete(any(Account.class));
     }
 }

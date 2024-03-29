@@ -1,9 +1,8 @@
 package com.chuwa.hw.bank_springboot.controller;
 
-import com.chuwa.hw.bank_springboot.dao.UserProfileRepository;
 import com.chuwa.hw.bank_springboot.entities.UserProfile;
 import com.chuwa.hw.bank_springboot.payload.UserProfileDto;
-import com.chuwa.hw.bank_springboot.services.UserProfileService;
+import com.chuwa.hw.bank_springboot.services.impl.UserProfileServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 class UserProfileControllerTest {
 
@@ -27,7 +24,7 @@ class UserProfileControllerTest {
 //    @Mock
 //    private UserProfileRepository userProfileRepositoryMock;
     @Mock
-    private UserProfileService userProfileServiceMock;
+    private UserProfileServiceImpl userProfileServiceImplMock;
 
     @Spy
     private ModelMapper modelMapper;
@@ -51,7 +48,7 @@ class UserProfileControllerTest {
         this.userProfile = new UserProfile(1L, "name", "123 address", "12345", "gmail@gmail.com");
         ModelMapper modelMapper1 = new ModelMapper();
         this.userProfileDto = modelMapper1.map(this.userProfile, UserProfileDto.class);
-//        Mockito.when(userProfileServiceMock.saveOrUpdateProfile(ArgumentMatchers.any(UserProfile.class)))
+//        Mockito.when(userProfileServiceImplMock.saveOrUpdateProfile(ArgumentMatchers.any(UserProfile.class)))
 //                .thenReturn(userProfile);
     }
 
@@ -60,7 +57,7 @@ class UserProfileControllerTest {
     void getAllUserProfiles() {
         List<UserProfile> userProfiles = new ArrayList<>();
         userProfiles.add(userProfile);
-        Mockito.when(userProfileServiceMock.getAllUserProfiles()).thenReturn(userProfiles);
+        Mockito.when(userProfileServiceImplMock.getAllUserProfiles()).thenReturn(userProfiles);
 
         List<UserProfileDto> userProfileDtoList = userProfileController.getAllUserProfiles().getBody();
 
@@ -71,7 +68,7 @@ class UserProfileControllerTest {
 
     @Test
     void getUserProfileById() {
-        Mockito.when(userProfileServiceMock.getUserProfileById(ArgumentMatchers.anyLong()))
+        Mockito.when(userProfileServiceImplMock.getUserProfileById(ArgumentMatchers.anyLong()))
                 .thenReturn(userProfile);
 
 
@@ -86,7 +83,7 @@ class UserProfileControllerTest {
 
     @Test
     void createOrUpdateUserProfile() {
-        Mockito.when(userProfileServiceMock.saveOrUpdateProfile(ArgumentMatchers.any(UserProfile.class)))
+        Mockito.when(userProfileServiceImplMock.saveOrUpdateProfile(ArgumentMatchers.any(UserProfile.class)))
                 .thenReturn(userProfile);
 
         UserProfileDto userProfileResponse = userProfileController.createOrUpdateUserProfile(userProfileDto).getBody();

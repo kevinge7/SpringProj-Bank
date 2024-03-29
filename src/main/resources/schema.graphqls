@@ -1,0 +1,36 @@
+type Account {
+    id: ID!
+    routingNumber: String!
+    accountNumber: String!
+    userProfile: UserProfile!
+    transactions: [Transaction!]!
+}
+
+type Transaction {
+    id: ID!
+    date: String!
+    description: String!
+    amount: Float!
+    account: Account!
+}
+
+type UserProfile {
+    id: ID!
+    name: String!
+    addr: String!
+    phone: String!
+    email: String!
+    accounts: [Account!]!
+}
+
+type Query {
+    accountById(id: ID!): Account
+    userProfileById(id: ID!): UserProfile
+    transactionById(id: ID!): Transaction
+}
+
+type Mutation {
+    createAccount(routingNumber: String!, accountNumber: String!, userProfileId: ID!): Account!
+    createTransaction(date: String!, description: String!, amount: Float!, accountId: ID!): Transaction!
+    createUserProfile(name: String!, addr: String!, phone: String!, email: String!): UserProfile!
+}

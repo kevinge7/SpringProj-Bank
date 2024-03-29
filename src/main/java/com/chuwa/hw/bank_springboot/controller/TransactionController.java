@@ -5,7 +5,7 @@ import com.chuwa.hw.bank_springboot.dao.TransactionRepository;
 import com.chuwa.hw.bank_springboot.entities.Account;
 import com.chuwa.hw.bank_springboot.entities.Transaction;
 import com.chuwa.hw.bank_springboot.payload.TransactionDto;
-import com.chuwa.hw.bank_springboot.services.TransactionService;
+import com.chuwa.hw.bank_springboot.services.impl.TransactionServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/transaction")
 public class TransactionController {
     @Autowired
-    private TransactionService transactionService;
+    private TransactionServiceImpl transactionServiceImpl;
      @Autowired
      private AccountRepository accountRepository;
 
@@ -28,7 +28,7 @@ public class TransactionController {
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<List<TransactionDto>> getAllTransactionsByAccountId(@PathVariable Long accountId) {
-        List<TransactionDto> transactions = transactionService.getAllTransactionsByAccountId(accountId).stream()
+        List<TransactionDto> transactions = transactionServiceImpl.getAllTransactionsByAccountId(accountId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(transactions);
@@ -36,7 +36,7 @@ public class TransactionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDto> getTransactionById(@PathVariable Long id) {
-        @Valid TransactionDto transaction = convertToDto(transactionService.getTransactionById(id));
+        @Valid TransactionDto transaction = convertToDto(transactionServiceImpl.getTransactionById(id));
         return ResponseEntity.ok(transaction);
     }
 
@@ -56,7 +56,7 @@ public class TransactionController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
-        transactionService.deleteTransaction(id);
+        transactionServiceImpl.deleteTransaction(id);
         return ResponseEntity.ok().build();
     }
 

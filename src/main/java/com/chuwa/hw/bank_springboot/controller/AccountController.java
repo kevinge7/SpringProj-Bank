@@ -2,7 +2,7 @@ package com.chuwa.hw.bank_springboot.controller;
 
 import com.chuwa.hw.bank_springboot.entities.Account;
 import com.chuwa.hw.bank_springboot.payload.AccountDto;
-import com.chuwa.hw.bank_springboot.services.AccountService;
+import com.chuwa.hw.bank_springboot.services.impl.AccountServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,24 +16,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/account")
 public class AccountController {
     @Autowired
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
     @PostMapping
     public ResponseEntity<AccountDto> createOrUpdateAccount(@Valid @RequestBody AccountDto accountDto){
-        AccountDto savedAccount = convertToDto(accountService.saveOrUpdateAccount(accountDto));
+        AccountDto savedAccount = convertToDto(accountServiceImpl.saveOrUpdateAccount(accountDto));
         return new ResponseEntity<>(savedAccount, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<List<AccountDto>> getAllAccounts(@PathVariable Long id){
-            List<AccountDto> accounts = accountService.getAllAccountsByUserId(id).stream()
+            List<AccountDto> accounts = accountServiceImpl.getAllAccountsByUserId(id).stream()
                     .map(this::convertToDto).collect(Collectors.toList());
             return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id){
-        accountService.deleteAccount(id);
+        accountServiceImpl.deleteAccount(id);
         return new ResponseEntity<>("Account Successfully Deleted!", HttpStatus.OK);
     }
 

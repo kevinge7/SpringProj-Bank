@@ -1,9 +1,8 @@
 package com.chuwa.hw.bank_springboot.controller;
 
-import com.chuwa.hw.bank_springboot.dao.UserProfileRepository;
 import com.chuwa.hw.bank_springboot.entities.UserProfile;
 import com.chuwa.hw.bank_springboot.payload.UserProfileDto;
-import com.chuwa.hw.bank_springboot.services.UserProfileService;
+import com.chuwa.hw.bank_springboot.services.impl.UserProfileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +16,11 @@ import java.util.stream.Collectors;
 public class UserProfileController {
 
     @Autowired
-    private UserProfileService userProfileService;
+    private UserProfileServiceImpl userProfileServiceImpl;
 
     @GetMapping
     public ResponseEntity<List<UserProfileDto>> getAllUserProfiles(){
-        List<UserProfile> userProfiles = userProfileService.getAllUserProfiles();
+        List<UserProfile> userProfiles = userProfileServiceImpl.getAllUserProfiles();
         List<UserProfileDto> responses = userProfiles.stream()
                 .map(this::mapToUserProfileResponse)
                 .collect(Collectors.toList());
@@ -30,14 +29,14 @@ public class UserProfileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserProfileDto> getUserProfileById(@PathVariable Long id){
-        UserProfile userProfile = userProfileService.getUserProfileById(id);
+        UserProfile userProfile = userProfileServiceImpl.getUserProfileById(id);
         return new ResponseEntity<>(mapToUserProfileResponse(userProfile), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserProfileDto> createOrUpdateUserProfile(@RequestBody UserProfileDto userProfileDto){
         UserProfile userProfile = mapToUserProfile(userProfileDto);
-        UserProfile savedUserProfile = userProfileService.saveOrUpdateProfile(userProfile);
+        UserProfile savedUserProfile = userProfileServiceImpl.saveOrUpdateProfile(userProfile);
         return new ResponseEntity<>(mapToUserProfileResponse(savedUserProfile), HttpStatus.OK);
     }
 
